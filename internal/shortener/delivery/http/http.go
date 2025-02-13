@@ -7,6 +7,7 @@ import (
 
 	"github.com/damedelion/url_shortener/internal/dto"
 	"github.com/damedelion/url_shortener/internal/shortener"
+	"github.com/gorilla/mux"
 )
 
 type delivery struct {
@@ -43,7 +44,7 @@ func (d *delivery) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (d *delivery) Get(w http.ResponseWriter, r *http.Request) {
-	shortURL := r.URL.Query().Get("short_url")
+	shortURL := mux.Vars(r)["short_url"]
 	shortURLDTO := dto.ShortURL{URL: shortURL}
 
 	longURL, err := d.usecase.Get(shortURLDTO.URL)

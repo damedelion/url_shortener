@@ -1,0 +1,23 @@
+services:
+  url_shortener_app:
+    container_name: url_shortener_app
+    image: damedelion/url_shortener_app
+    build: .
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: url_shortener_db
+    image: postgres:17
+    env_file:
+      - config.env
+
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgres/data
+
+volumes:
+  pgdata:

@@ -1,21 +1,30 @@
 package server
 
 import (
-	"sync"
+	"database/sql"
 
+	"github.com/damedelion/url_shortener/internal/shortener"
 	"github.com/damedelion/url_shortener/internal/shortener/delivery/http"
 	"github.com/damedelion/url_shortener/internal/shortener/repository/inmemory"
+	"github.com/damedelion/url_shortener/internal/shortener/repository/postgres"
 	"github.com/damedelion/url_shortener/internal/shortener/usecase"
 )
 
 func (s *Server) handlersRegister() {
-	storageLongToShort := make(map[string]string)
-	storageShortToLong := make(map[string]string)
-	mutex := &sync.Mutex{}
-	repository := inmemory.New(storageLongToShort, storageShortToLong, mutex)
+	var repository shortener.Repository
+
+	switch db := s.db.(type) {
+	case *sql.DB:
+		repository = postgres.New(db)
+	default:
+		storageLongToShort := make(map[string]string)
+		storageShortToLong := make(map[string]string)
+		repository = inmemory.New(storageLongToShort, storageShortToLong)
+	}
+
 	usecase := usecase.New(repository)
 	handlers := http.New(usecase)
 
 	s.mux.HandleFunc("/", handlers.Create).Methods("POST")
-	s.mux.HandleFunc("/", handlers.Get).Queries("short_url", "").Methods("GET")
+	s.mux.HandleFunc("/{short_url}", handlers.Get).Methods("GET")
 }

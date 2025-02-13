@@ -1,27 +1,27 @@
 package server
 
 import (
-	"database/sql"
 	"fmt"
 	"net/http"
 
+	"github.com/damedelion/url_shortener/config"
 	"github.com/gorilla/mux"
 )
 
 type Server struct {
-	db  *sql.DB
+	db  any
 	mux *mux.Router
 }
 
-func New(db *sql.DB, mux *mux.Router) *Server {
+func New(db any, mux *mux.Router) *Server {
 	return &Server{db: db, mux: mux}
 }
 
-func (s *Server) Run() {
+func (s *Server) Run(config *config.Server) {
 	s.handlersRegister()
 
 	server := http.Server{
-		Addr:    ":3000",
+		Addr:    fmt.Sprintf(":%d", config.Port),
 		Handler: s.mux,
 	}
 

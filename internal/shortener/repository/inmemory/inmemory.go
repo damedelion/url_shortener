@@ -10,11 +10,11 @@ import (
 type repository struct {
 	storageLongToShort map[string]string
 	storageShortToLong map[string]string
-	mutex              *sync.Mutex
+	mutex              sync.Mutex
 }
 
-func New(st1, st2 map[string]string, mutex *sync.Mutex) shortener.Repository {
-	return &repository{storageLongToShort: st1, storageShortToLong: st2, mutex: mutex}
+func New(st1, st2 map[string]string) shortener.Repository {
+	return &repository{storageLongToShort: st1, storageShortToLong: st2, mutex: sync.Mutex{}}
 }
 
 func (r *repository) Create(shortURL, longURL string) error {

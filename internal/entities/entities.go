@@ -1,8 +1,15 @@
 package entities
 
-import "github.com/google/uuid"
+import (
+	"time"
 
-type ShortURL struct {
-	ID  uuid.UUID `json:"id"`
-	URL string    `json:"short_url"`
+	"github.com/google/uuid"
+)
+
+type URL struct {
+	ID        uuid.UUID
+	ShortURL  string
+	LongURL   string
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
