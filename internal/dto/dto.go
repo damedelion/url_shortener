@@ -1,5 +1,9 @@
 package dto
 
 type LongURL struct {
-	URL string `json:"url"`
+	URL string `json:"long_url"`
+}
+
+type ShortURL struct {
+	URL string `json:"short_url"`
 }

@@ -9,12 +9,13 @@ import (
 )
 
 func (s *Server) handlersRegister() {
-	storage := make(map[string]string)
+	storageLongToShort := make(map[string]string)
+	storageShortToLong := make(map[string]string)
 	mutex := &sync.Mutex{}
-	repository := inmemory.New(storage, mutex)
+	repository := inmemory.New(storageLongToShort, storageShortToLong, mutex)
 	usecase := usecase.New(repository)
 	handlers := http.New(usecase)
 
 	s.mux.HandleFunc("/", handlers.Create).Methods("POST")
-	s.mux.HandleFunc("/", handlers.Get).Methods("GET")
+	s.mux.HandleFunc("/", handlers.Get).Queries("short_url", "").Methods("GET")
 }

@@ -5,7 +5,7 @@ import (
 	"slices"
 )
 
-const CharsCount int64 = 63
+const charsCount int64 = 63
 
 func ToBase63(id int64, resLength int) (string, error) {
 	res := make([]byte, resLength)
@@ -13,13 +13,13 @@ func ToBase63(id int64, resLength int) (string, error) {
 
 	for i := 0; i < resLength; i++ {
 		if id > 0 {
-			remainder = byte(id % CharsCount)
+			remainder = byte(id % charsCount)
 			var err error
 			remainder, err = base63Table(remainder)
 			if err != nil {
 				return "", fmt.Errorf("bad id")
 			}
-			id /= CharsCount
+			id /= charsCount
 		} else {
 			remainder = byte('0')
 		}

@@ -18,6 +18,10 @@ func (r *repository) Create(shortURL, longURL string) error {
 	return nil
 }
 
-func (r *repository) Get(shortURL string) (string, error) {
+func (r *repository) GetShort(longURL string) (string, error) {
+	return "", nil
+}
+
+func (r *repository) GetLong(shortURL string) (string, error) {
 	return "", nil
 }
