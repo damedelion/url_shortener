@@ -23,3 +23,12 @@ goose-up:
 
 goose-down:
 	@goose $(GOOSE_DRIVER) $(GOOSE_DBSTRING) -dir $(GOOSE_MIGRATION_DIR) down
+
+docker-inmemory-build:
+	@docker build -t url_shortener_app .
+
+docker-inmemory-start:
+	@docker run -p 8080:8080 -d url_shortener_app
+
+docker-inmemory-stop:
+	@docker stop url_shortener_app
