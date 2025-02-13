@@ -28,7 +28,7 @@ func (d *delivery) Create(w http.ResponseWriter, r *http.Request) {
 
 	shortURL, err := d.usecase.Create(longURLDTO.URL)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("usecase error: %v", err), http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf("usecase error: %v", err), http.StatusBadRequest)
 		return
 	}
 
@@ -49,7 +49,7 @@ func (d *delivery) Get(w http.ResponseWriter, r *http.Request) {
 
 	longURL, err := d.usecase.Get(shortURLDTO.URL)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("usecase error: %v", err), http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf("usecase error: %v", err), http.StatusNotFound)
 		return
 	}
 

@@ -18,15 +18,15 @@ func New(repository shortener.Repository) shortener.Usecase {
 }
 
 func (u *usecase) Create(longURL string) (string, error) {
-	_, err := u.repository.GetShort(longURL)
+	shortURL, err := u.repository.GetShort(longURL)
 	if err == nil {
-		return "", fmt.Errorf(`"%s" is already shortened`, longURL)
+		return shortURL, nil
 	}
 
 	maxCount := math.PowInt64(int64(63), int64(10))
 	id := rand.Int63n(maxCount)
 	res, _ := base63.ToBase63(id, 10)
-	shortURL := string(res)
+	shortURL = string(res)
 
 	err = u.repository.Create(shortURL, longURL)
 	if err != nil {
@@ -39,7 +39,7 @@ func (u *usecase) Create(longURL string) (string, error) {
 func (u *usecase) Get(shortURL string) (string, error) {
 	longURL, err := u.repository.GetLong(shortURL)
 	if err != nil {
-		return "", fmt.Errorf("not found")
+		return "", fmt.Errorf("%s not found", shortURL)
 	}
 
 	return longURL, nil
